@@ -5,6 +5,7 @@ const { LeafKeyCoder, LeafValueCoder, constants } = require('@umb-network/toolbo
 
 // Chain registry address (see https://umbrella-network.readme.io/docs/umb-token-contracts)
 const REGISTRY_CONTRACT_ADDRESS = process.env.REGISTRY_CONTRACT_ADDRESS;
+const label = 'BNB-USD'
 
 describe("Marketplace", function () {
   let Marketplace, marketplace, ArtToken, art, priceRegistry, tx
@@ -23,7 +24,7 @@ describe("Marketplace", function () {
     await setup();
 
     // Deploy the Liquidity Pool smart contract
-    marketplace = await Marketplace.deploy(priceRegistry, keyEncoder('BNB-USD'));
+    marketplace = await Marketplace.deploy(priceRegistry, keyEncoder(label));   // Taking DAI as Dollar 
     await marketplace.deployed();
 
     // console.log('mock DAI token deployed at', art.address);
@@ -36,7 +37,7 @@ describe("Marketplace", function () {
     expect(await marketplace.priceRegistry()).to.equal(priceRegistry);
     const keyPair = await marketplace.keyPair()
     console.log('keyPair', keyPair);
-    expect(keyDecoder(keyPair)).to.equal('BNB-USD');
+    expect(keyDecoder(keyPair)).to.equal(label);
   });
 
   it('Sets the price for each category type', async function () {
@@ -52,7 +53,6 @@ describe("Marketplace", function () {
   });
 
   it('Fetches BNB price for each category type', async function () {
-    const label = 'DAI-BNB'
     let price = await marketplace.fetchCategoryPrice(0)
     console.log('Price from Contract', price.toString());
 

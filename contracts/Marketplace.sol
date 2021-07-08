@@ -92,7 +92,7 @@ contract Marketplace is Ownable, Pausable, FeeManager, IMarketplace, ERC721Holde
         (uint256 price, uint256 timestamp) = _chain().getCurrentValue(keyPair);
         console.log("umbChain:: price, timestamp", price, timestamp);
         require(price > 0 && timestamp > 0, "price does not exists");
-        return uint256(price.mul(categoryPrice[_type]));
+        return uint256(price.mul(categoryPrice[_type]).div(10**5));
     }
 
     /**
@@ -408,7 +408,4 @@ contract Marketplace is Ownable, Pausable, FeeManager, IMarketplace, ERC721Holde
         return IERC721(_nftAddress);
     }
 
-
-
-    
 }
